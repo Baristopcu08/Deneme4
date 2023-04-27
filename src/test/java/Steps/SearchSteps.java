@@ -3,17 +3,18 @@ package Steps;
 import Locators.MyLocators;
 import ReuseableClass.BaseClass;
 import ReuseableClass._Conditions;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WindowType;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.IOException;
 import java.util.List;
 
 public class SearchSteps extends BaseClass implements MyLocators {
+
+
     @Given("user on homepage")
     public void userOnHomepage() {
 
@@ -37,7 +38,7 @@ public class SearchSteps extends BaseClass implements MyLocators {
     }
 
     @And("should be succest login")
-    public void shouldBeSuccestLogin() throws IOException {
+    public void shouldBeSuccestLogin(){
         $(By.xpath(usernameInput)).sendKeys("Admin");
         $(By.xpath(passwordInput)).sendKeys("admin123");
         $(By.xpath(loginButton)).click();
@@ -45,10 +46,15 @@ public class SearchSteps extends BaseClass implements MyLocators {
         $(By.xpath(adminButton)).click();
         wait.until(ExpectedConditions.urlContains("viewSystemUsers"));
         $(By.xpath(adminPageUsernameInput)).sendKeys(System.getProperty("lastProductName"));
-        getScreenshot("UsernameInput");
-        /*
-Username : Admin
-Password : admin123
- */
+        byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+        //scenario.attach(screenshot, "IMAGE/png", "Foto");
+        try {
+            getScreenshot("UsernameInput");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
+
+
 }
